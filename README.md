@@ -1,0 +1,721 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Familia Impulsa — Prototipo</title>
+<style>
+  :root{
+    --bg:#ffffff;
+    --primary:#0f8f6f; /* verde azulado */
+    --secondary:#2b6ea3; /* azul suave */
+    --accent:#f39c4d; /* naranja */
+    --muted:#6b7280;
+    --card:#f8fafb;
+    --radius:12px;
+    --glass: rgba(15,143,111,0.06);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:#0b1220;line-height:1.4}
+  header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid #eef2f6;background:linear-gradient(90deg, rgba(15,143,111,0.04), rgba(43,110,163,0.02));position:sticky;top:0;z-index:10}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;box-shadow:0 6px 18px rgba(11,18,32,0.06)}
+  .logo svg{width:26px;height:26px}
+  nav{display:flex;gap:12px;align-items:center}
+  nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:10px;font-weight:600}
+  nav a.active{color:var(--primary);background:var(--glass)}
+  .container{max-width:1100px;margin:28px auto;padding:0 20px}
+  .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;margin-bottom:20px}
+  .card{background:var(--card);padding:20px;border-radius:var(--radius);box-shadow:0 6px 18px rgba(11,18,32,0.03)}
+  h1{margin:0;font-size:22px}
+  p.lead{color:var(--muted);margin-top:8px}
+  .cta{display:flex;gap:12px;margin-top:18px}
+  .btn{padding:10px 16px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
+  .btn.primary{background:var(--primary);color:white}
+  .btn.secondary{background:transparent;border:2px solid var(--primary);color:var(--primary)}
+  .illustr{border-radius:12px;overflow:hidden;height:260px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#f0fbf6,#ffffff)}
+  .illustr svg{width:100%;height:100%;max-width:360px;opacity:0.95}
+  /* Layout sections */
+  .grid-2{display:grid;grid-template-columns:1fr 360px;gap:20px}
+  .form-row{display:flex;gap:12px}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  input[type="text"], input[type="number"], select, textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #e6eef3;background:white}
+  textarea{min-height:90px;resize:vertical}
+  .small{font-size:13px;color:var(--muted)}
+  .list{display:flex;flex-direction:column;gap:12px}
+  .member-card{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;background:white;border:1px solid #eef4f7}
+  .tag{display:inline-block;padding:6px 10px;border-radius:999px;background:#eef7f4;color:var(--primary);font-weight:700;font-size:13px}
+  .skills{display:flex;gap:8px;flex-wrap:wrap}
+  .skill{background:#f3f7fb;padding:6px 8px;border-radius:8px;color:var(--secondary);font-weight:600;font-size:13px}
+  /* Opportunities */
+  .search-bar{display:flex;gap:8px}
+  .opportunity{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:12px;background:white;border:1px solid #eef4f7}
+  .op-row{display:flex;justify-content:space-between;align-items:center}
+  .compat{font-weight:800;color:var(--primary)}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{background:#fff7ed;color:var(--accent);padding:6px 8px;border-radius:8px;font-weight:700;border:1px solid rgba(243,156,77,0.12)}
+  .btn.small{padding:8px 10px;font-size:13px}
+  /* Finance */
+  .finance-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .kpi{padding:12px;border-radius:10px;background:white;border:1px solid #eef4f7;display:flex;flex-direction:column;gap:6px}
+  .progress{height:12px;background:#eef4f7;border-radius:999px;overflow:hidden}
+  .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary))}
+  .pie{width:120px;height:120px;border-radius:999px;background:conic-gradient(var(--primary) 0 55%, #f3f7fb 55% 85%, #f8e9df 85% 100%);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff}
+  /* Dashboard */
+  .kpis{display:flex;gap:12px;flex-wrap:wrap}
+  .kpi-big{flex:1;min-width:160px;padding:14px;border-radius:12px;background:white;border:1px solid #eef4f7}
+  .strengths{display:flex;gap:10px;flex-wrap:wrap}
+  .strength{background:#f7fbf9;padding:10px;border-radius:10px;border:1px solid #e6f3ec;color:var(--primary);font-weight:700}
+  footer{padding:18px 24px;color:var(--muted);font-size:13px;text-align:center;margin-top:28px}
+  /* Responsive */
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr;gap:16px}
+    .grid-2{grid-template-columns:1fr}
+    nav{display:none}
+    header{padding:12px}
+    .container{padding:12px}
+  }
+  /* small helpers */
+  .muted{color:var(--muted)}
+  .right{margin-left:auto}
+  .toast{position:fixed;right:18px;bottom:18px;background:#0b1220;color:white;padding:12px 16px;border-radius:10px;box-shadow:0 8px 30px rgba(11,18,32,0.12)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo" aria-hidden="true">
+      <!-- simple house + leaf icon -->
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 11.5L12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V11.5z" fill="white"/>
+        <path d="M12 2v6" stroke="rgba(255,255,255,0.6)" stroke-width="1.2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div>
+      <div style="font-weight:800">Familia Impulsa</div>
+      <div style="font-size:12px;color:var(--muted)">Convierte el talento de tu familia en nuevas oportunidades</div>
+    </div>
+  </div>
+
+  <nav aria-label="Navegación principal">
+    <a href="#" class="active" data-nav="inicio">Inicio</a>
+    <a href="#" data-nav="mi-familia">Mi familia</a>
+    <a href="#" data-nav="habilidades">Habilidades</a>
+    <a href="#" data-nav="oportunidades">Oportunidades</a>
+    <a href="#" data-nav="finanzas">Finanzas</a>
+    <a href="#" data-nav="progreso">Progreso</a>
+  </nav>
+</header>
+
+<main class="container">
+
+  <!-- INICIO -->
+  <section id="inicio" class="page">
+    <div class="hero">
+      <div>
+        <div class="card">
+          <h1>Convierte el talento de tu familia en nuevas oportunidades</h1>
+          <p class="lead">Identifica las habilidades de tu familia, encuentra oportunidades laborales y organiza tus recursos para construir un futuro económico más estable.</p>
+          <div class="cta">
+            <button class="btn primary" id="startBtn">Comenzar</button>
+            <button class="btn secondary" id="howBtn">¿Cómo funciona?</button>
+          </div>
+          <div style="margin-top:14px;color:var(--muted);font-size:13px">
+            <strong>Nota:</strong> Prototipo universitario. Herramienta de acompañamiento para identificar habilidades, conectar con empleos formales y organizar finanzas familiares.
+          </div>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:16px">
+          <div class="card" style="flex:1">
+            <div style="font-weight:800">¿Por qué funciona?</div>
+            <div class="small" style="margin-top:8px">Porque trabaja con el potencial de toda la familia: habilidades, disponibilidad y metas económicas, no solo con un currículum individual.</div>
+          </div>
+          <div class="card" style="width:220px">
+            <div style="font-weight:800">Resultados esperados</div>
+            <div class="small" style="margin-top:8px">Mejor organización de ingresos, más postulaciones a empleos formales y decisiones financieras más informadas.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="illustr card" aria-hidden="true">
+        <!-- simple illustrative SVG -->
+        <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ilustración familia">
+          <g fill="none" fill-rule="evenodd">
+            <rect width="600" height="400" rx="12" fill="#fff"/>
+            <g transform="translate(40,40)">
+              <rect width="220" height="120" rx="12" fill="#eaf9f2"/>
+              <rect x="260" y="10" width="220" height="120" rx="12" fill="#eef6ff"/>
+              <circle cx="80" cy="200" r="48" fill="#fef3e8"/>
+              <rect x="200" y="170" width="260" height="120" rx="12" fill="#f3f7fb"/>
+              <text x="30" y="70" font-size="18" fill="#0b1220" font-weight="700">Familia</text>
+              <text x="300" y="70" font-size="14" fill="#0b1220">Habilidades + Oportunidades</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- PERFIL FAMILIAR -->
+  <section id="mi-familia" class="page" style="display:none">
+    <div class="grid-2">
+      <div>
+        <div class="card">
+          <h2>Perfil familiar</h2>
+          <p class="small">Registra la información básica de tu familia. Estos datos ayudan a personalizar oportunidades y el panel financiero.</p>
+
+          <form id="familyForm" style="margin-top:12px">
+            <label>Nombre de la familia</label>
+            <input type="text" id="familyName" value="Familia Rodríguez" />
+
+            <div class="form-row" style="margin-top:10px">
+              <div style="flex:1">
+                <label>Número de integrantes</label>
+                <input type="number" id="familyCount" value="5" min="1" />
+              </div>
+              <div style="flex:1">
+                <label>Ciudad</label>
+                <input type="text" id="familyCity" value="Neiva" />
+              </div>
+            </div>
+
+            <label style="margin-top:10px">Situación laboral</label>
+            <select id="familyWork">
+              <option>Miembros con empleo informal, desempleo parcial</option>
+              <option>Mayoría con empleo formal</option>
+              <option>Desempleo general</option>
+            </select>
+
+            <label style="margin-top:10px">Principales necesidades económicas</label>
+            <input type="text" id="familyNeeds" value="Ingresos estables; pago de servicios; escolaridad" />
+
+            <label style="margin-top:10px">Objetivo económico familiar</label>
+            <input type="text" id="familyGoal" value="Ahorrar $2.000.000 COP en 12 meses para emprendimiento" />
+
+            <div style="margin-top:12px;display:flex;gap:8px">
+              <button type="button" class="btn primary" id="registerFamily">Registrar familia</button>
+              <button type="button" class="btn" id="editFamily">Editar</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h3>Resumen</h3>
+          <div id="familySummary" style="margin-top:8px">
+            <!-- filled by JS -->
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <h3>Invita a tu familia</h3>
+          <p class="small">Comparte el enlace para que otros integrantes completen su perfil y habilidades.</p>
+          <div style="margin-top:12px;display:flex;gap:8px">
+            <input type="text" id="inviteLink" value="https://familia-impulsa/demo/invite/rodiguez" />
+            <button class="btn small" onclick="copyInvite()">Copiar</button>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h3>Consejo rápido</h3>
+          <p class="small">Registra primero la familia y luego agrega integrantes. Esto permite que las oportunidades se ordenen por compatibilidad con las habilidades registradas.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HABILIDADES -->
+  <section id="habilidades" class="page" style="display:none">
+    <div class="card">
+      <h2>Habilidades de los integrantes</h2>
+      <p class="small">Registra cada integrante con sus habilidades, experiencia y disponibilidad.</p>
+
+      <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap">
+        <div style="flex:1;min-width:260px">
+          <form id="memberForm">
+            <label>Nombre</label>
+            <input type="text" id="mName" value="María Rodríguez" />
+            <div class="form-row" style="margin-top:8px">
+              <div style="flex:1">
+                <label>Edad</label>
+                <input type="number" id="mAge" value="34" />
+              </div>
+              <div style="flex:1">
+                <label>Nivel educativo</label>
+                <input type="text" id="mEdu" value="Bachiller" />
+              </div>
+            </div>
+
+            <label style="margin-top:8px">Experiencia laboral</label>
+            <input type="text" id="mExp" value="3 años en cocina; 1 año en ventas" />
+
+            <label style="margin-top:8px">Habilidades (separa con comas)</label>
+            <input type="text" id="mSkills" value="Cocina, Atención al cliente, Manejo de caja" />
+
+            <div class="form-row" style="margin-top:8px">
+              <div style="flex:1">
+                <label>Disponibilidad</label>
+                <select id="mAvail">
+                  <option>Medio tiempo (mañanas)</option>
+                  <option>Tiempo completo</option>
+                  <option>Tardes</option>
+                </select>
+              </div>
+              <div style="flex:1">
+                <label>Tipo de trabajo que busca</label>
+                <input type="text" id="mType" value="Cocina formal; auxiliar de restaurante" />
+              </div>
+            </div>
+
+            <div style="margin-top:10px">
+              <button type="button" class="btn primary" id="addMember">Agregar integrante</button>
+            </div>
+          </form>
+        </div>
+
+        <div style="flex:1;min-width:260px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <h3>Integrantes registrados</h3>
+            <div class="tag" id="memberCount">5</div>
+          </div>
+          <div class="list" id="membersList" style="margin-top:10px">
+            <!-- JS fills -->
+          </div>
+
+          <div style="margin-top:12px" class="card">
+            <div style="font-weight:800">Ejemplos de habilidades</div>
+            <div class="skills" style="margin-top:8px">
+              <div class="skill">Construcción</div>
+              <div class="skill">Cocina</div>
+              <div class="skill">Ventas</div>
+              <div class="skill">Atención al cliente</div>
+              <div class="skill">Tecnología</div>
+              <div class="skill">Diseño</div>
+              <div class="skill">Administración</div>
+              <div class="skill">Transporte</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OPORTUNIDADES -->
+  <section id="oportunidades" class="page" style="display:none">
+    <div class="card">
+      <h2>Oportunidades laborales</h2>
+      <p class="small">Busca empleos formales y postula desde la plataforma. Las oportunidades se ordenan por compatibilidad con las habilidades registradas.</p>
+
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+        <div style="flex:1;min-width:220px">
+          <input type="text" id="searchInput" placeholder="Buscar por cargo, habilidad o ciudad" style="padding:10px;border-radius:10px;border:1px solid #e6eef3;width:100%" />
+        </div>
+        <div>
+          <select id="filterContract" style="padding:10px;border-radius:10px;border:1px solid #e6eef3">
+            <option value="">Tipo de contrato</option>
+            <option value="Indefinido">Indefinido</option>
+            <option value="Término fijo">Término fijo</option>
+          </select>
+        </div>
+        <div>
+          <button class="btn primary" id="searchBtn">Buscar</button>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;display:grid;gap:12px">
+        <div id="opportunitiesList">
+          <!-- JS fills opportunity cards -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINANZAS -->
+  <section id="finanzas" class="page" style="display:none">
+    <div class="card">
+      <h2>Organización económica familiar</h2>
+      <p class="small">Organiza ingresos, gastos y deudas. Usa el simulador para ver cómo pequeños ajustes impactan tu meta de ahorro.</p>
+
+      <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap">
+        <div style="flex:1;min-width:260px">
+          <div class="finance-grid">
+            <div class="kpi">
+              <div class="small">Ingresos familiares</div>
+              <div style="font-weight:800;font-size:18px" id="incomeVal">$2.800.000 COP</div>
+            </div>
+            <div class="kpi">
+              <div class="small">Gastos básicos</div>
+              <div style="font-weight:800;font-size:18px" id="expensesVal">$1.900.000 COP</div>
+            </div>
+            <div class="kpi">
+              <div class="small">Obligaciones / Deudas</div>
+              <div style="font-weight:800;font-size:18px" id="debtVal">$400.000 COP</div>
+            </div>
+            <div class="kpi">
+              <div class="small">Dinero disponible</div>
+              <div style="font-weight:800;font-size:18px" id="availableVal">$500.000 COP</div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px;display:flex;gap:8px">
+            <button class="btn" onclick="adjustFinance(-50000)">Reducir gastos 50k</button>
+            <button class="btn" onclick="adjustFinance(50000)">Aumentar ingresos 50k</button>
+            <button class="btn primary" onclick="simulate()">Simular ajuste</button>
+          </div>
+        </div>
+
+        <div style="width:320px">
+          <div class="card" style="text-align:center">
+            <div style="font-weight:800">Meta económica</div>
+            <div class="small" style="margin-top:6px">Ahorrar $2.000.000 COP en 12 meses</div>
+            <div style="margin-top:12px" class="progress" aria-hidden="true">
+              <i id="goalBar" style="width:25%"></i>
+            </div>
+            <div style="margin-top:8px;font-weight:800" id="goalPct">25% alcanzado</div>
+            <div style="margin-top:12px" class="pie" aria-hidden="true">$500k</div>
+          </div>
+
+          <div class="card" style="margin-top:12px">
+            <div style="font-weight:800">Mensaje educativo</div>
+            <p class="small" style="margin-top:8px">Organizar tus recursos es el primer paso para tomar mejores decisiones económicas. Familia Impulsa ayuda a organizar información y tomar decisiones; no promete eliminar deudas automáticamente.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRESO -->
+  <section id="progreso" class="page" style="display:none">
+    <div class="card">
+      <h2>Panel de progreso</h2>
+      <p class="small">Resumen del avance familiar: habilidades, postulaciones y progreso económico.</p>
+
+      <div style="margin-top:12px" class="kpis">
+        <div class="kpi-big">
+          <div class="small">Integrantes registrados</div>
+          <div style="font-weight:900;font-size:20px" id="kIntegrantes">5</div>
+        </div>
+        <div class="kpi-big">
+          <div class="small">Habilidades identificadas</div>
+          <div style="font-weight:900;font-size:20px" id="kHabilidades">12</div>
+        </div>
+        <div class="kpi-big">
+          <div class="small">Oportunidades encontradas</div>
+          <div style="font-weight:900;font-size:20px" id="kOportunidades">18</div>
+        </div>
+        <div class="kpi-big">
+          <div class="small">Postulaciones realizadas</div>
+          <div style="font-weight:900;font-size:20px" id="kPostulaciones">4</div>
+        </div>
+        <div class="kpi-big">
+          <div class="small">Entrevistas</div>
+          <div style="font-weight:900;font-size:20px" id="kEntrevistas">2</div>
+        </div>
+        <div class="kpi-big">
+          <div class="small">Empleos conseguidos</div>
+          <div style="font-weight:900;font-size:20px" id="kEmpleos">1</div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px">
+        <h3>Fortalezas de nuestra familia</h3>
+        <div class="strengths" style="margin-top:8px">
+          <div class="strength">Responsabilidad</div>
+          <div class="strength">Trabajo en equipo</div>
+          <div class="strength">Solidaridad</div>
+          <div class="strength">Organización</div>
+          <div class="strength">Compromiso</div>
+          <div class="strength">Estabilidad</div>
+        </div>
+
+        <div style="margin-top:12px" class="card">
+          <div style="font-weight:800">Ejemplo práctico</div>
+          <div class="small" style="margin-top:8px">Trabajo en equipo: coordinación para turnos de cuidado infantil que permite a dos integrantes trabajar en horarios complementarios.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Familia Impulsa — Prototipo universitario · No es una plataforma financiera ni una bolsa de empleo real.
+</footer>
+
+<!-- Toast -->
+<div id="toast" class="toast" style="display:none">Guardado</div>
+
+<script>
+/* Datos de ejemplo iniciales */
+const state = {
+  family: {
+    name: "Familia Rodríguez",
+    count: 5,
+    city: "Neiva",
+    work: "Miembros con empleo informal, desempleo parcial",
+    needs: "Ingresos estables; pago de servicios; escolaridad",
+    goal: "Ahorrar $2.000.000 COP en 12 meses para emprendimiento"
+  },
+  members: [
+    {name:"María Rodríguez", age:34, edu:"Bachiller", exp:"3 años en cocina; 1 año en ventas", skills:["Cocina","Atención al cliente","Manejo de caja"], avail:"Medio tiempo (mañanas)", type:"Cocina formal"},
+    {name:"Juan Rodríguez", age:36, edu:"Primaria", exp:"5 años en construcción", skills:["Construcción","Transporte"], avail:"Tiempo completo", type:"Obra / jornal"},
+    {name:"Camila Rodríguez", age:16, edu:"Bachiller", exp:"1 año en ventas", skills:["Ventas","Atención al cliente"], avail:"Tardes", type:"Punto de venta"},
+    {name:"Pedro Rodríguez", age:14, edu:"Estudiante", exp:"-", skills:["Ayudante general"], avail:"Fines de semana", type:"Ayudante"},
+    {name:"Rosa (abuela)", age:62, edu:"Primaria", exp:"Administración básica", skills:["Administración"], avail:"Parcial", type:"Apoyo tienda"}
+  ],
+  opportunities: [
+    {id:1, title:"Auxiliar de cocina", company:"Restaurante La Esquina", city:"Neiva", contract:"Término fijo", shift:"Medio tiempo (6:00–12:00)", salary:"$1.200.000 COP", skills:["Cocina","Higiene","Trabajo en equipo"]},
+    {id:2, title:"Vendedor punto de venta", company:"Tiendas Sol", city:"Neiva", contract:"Indefinido", shift:"Tiempo completo", salary:"$1.000.000 COP + com.", skills:["Ventas","Atención al cliente"]},
+    {id:3, title:"Auxiliar administrativo", company:"Constructora Andes", city:"Neiva", contract:"Término fijo", shift:"Tiempo completo", salary:"$1.400.000 COP", skills:["Administración","Excel básico"]},
+    {id:4, title:"Ayudante de obra", company:"Obras y Servicios", city:"Neiva", contract:"Por obra", shift:"Tiempo completo", salary:"$1.100.000 COP", skills:["Construcción","Transporte"]}
+  ],
+  finance: {income:2800000, expenses:1900000, debt:400000, goal:2000000},
+  metrics: {applications:4, interviews:2, hires:1}
+};
+
+/* Utilidades */
+function showToast(msg="Guardado"){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(()=>t.style.display='none',2000);
+}
+
+/* Navegación */
+document.querySelectorAll('[data-nav]').forEach(a=>{
+  a.addEventListener('click', e=>{
+    e.preventDefault();
+    const target = a.getAttribute('data-nav');
+    document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+    document.getElementById(target).style.display='block';
+    document.querySelectorAll('nav a').forEach(n=>n.classList.remove('active'));
+    a.classList.add('active');
+    // update summary when navigating
+    renderFamilySummary();
+    renderMembers();
+    renderOpportunities();
+    renderFinance();
+    renderProgress();
+  });
+});
+
+/* INICIO CTA */
+document.getElementById('startBtn').addEventListener('click',()=>{
+  document.querySelector('[data-nav="mi-familia"]').click();
+});
+document.getElementById('howBtn').addEventListener('click',()=>{
+  alert("Flujo sugerido: Registrar familia → Agregar integrantes → Buscar oportunidades → Postular → Registrar postulaciones en Progreso → Ajustar finanzas.");
+});
+
+/* PERFIL FAMILIAR */
+function renderFamilySummary(){
+  const s = document.getElementById('familySummary');
+  s.innerHTML = `
+    <div style="font-weight:800">${state.family.name}</div>
+    <div class="small" style="margin-top:6px">Integrantes: <strong>${state.family.count}</strong></div>
+    <div class="small">Ciudad: <strong>${state.family.city}</strong></div>
+    <div class="small">Situación laboral: <strong>${state.family.work}</strong></div>
+    <div class="small">Necesidades: <strong>${state.family.needs}</strong></div>
+    <div class="small">Objetivo: <strong>${state.family.goal}</strong></div>
+  `;
+}
+document.getElementById('registerFamily').addEventListener('click',()=>{
+  state.family.name = document.getElementById('familyName').value;
+  state.family.count = Number(document.getElementById('familyCount').value);
+  state.family.city = document.getElementById('familyCity').value;
+  state.family.work = document.getElementById('familyWork').value;
+  state.family.needs = document.getElementById('familyNeeds').value;
+  state.family.goal = document.getElementById('familyGoal').value;
+  showToast("Familia registrada");
+  renderFamilySummary();
+});
+
+/* INVITE */
+function copyInvite(){
+  const el = document.getElementById('inviteLink');
+  el.select();
+  document.execCommand('copy');
+  showToast("Enlace copiado");
+}
+
+/* HABILIDADES: miembros */
+function renderMembers(){
+  const list = document.getElementById('membersList');
+  list.innerHTML = '';
+  state.members.forEach((m, idx)=>{
+    const div = document.createElement('div');
+    div.className = 'member-card';
+    div.innerHTML = `
+      <div style="width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--secondary),var(--primary));color:white;display:flex;align-items:center;justify-content:center;font-weight:800">${m.name.split(' ')[0].charAt(0)}</div>
+      <div style="flex:1">
+        <div style="font-weight:800">${m.name} <span class="small" style="color:var(--muted)">· ${m.age} años</span></div>
+        <div class="small" style="margin-top:6px">${m.edu} · ${m.exp}</div>
+        <div class="skills" style="margin-top:8px">${m.skills.map(s=>`<div class="skill">${s}</div>`).join('')}</div>
+      </div>
+      <div style="text-align:right">
+        <div class="small">${m.avail}</div>
+        <div style="margin-top:8px">
+          <button class="btn small" onclick="applySample(${idx})">Sugerir roles</button>
+        </div>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+  document.getElementById('memberCount').textContent = state.members.length;
+  // update metrics
+  document.getElementById('kIntegrantes').textContent = state.members.length;
+  document.getElementById('kHabilidades').textContent = state.members.reduce((acc,m)=>acc + m.skills.length,0);
+}
+document.getElementById('addMember').addEventListener('click',()=>{
+  const name = document.getElementById('mName').value || 'Sin nombre';
+  const age = Number(document.getElementById('mAge').value) || 0;
+  const edu = document.getElementById('mEdu').value;
+  const exp = document.getElementById('mExp').value;
+  const skills = document.getElementById('mSkills').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const avail = document.getElementById('mAvail').value;
+  const type = document.getElementById('mType').value;
+  state.members.push({name,age,edu,exp,skills,avail,type});
+  showToast("Integrante agregado");
+  renderMembers();
+  renderOpportunities();
+});
+
+/* OPORTUNIDADES */
+function compatibilityScore(op, members){
+  // simple compatibility: count matching skills across family
+  const familySkills = new Set(members.flatMap(m=>m.skills.map(s=>s.toLowerCase())));
+  const matches = op.skills.filter(s=>familySkills.has(s.toLowerCase())).length;
+  const score = Math.round((matches / op.skills.length) * 100);
+  return score;
+}
+function renderOpportunities(filterText=''){
+  const container = document.getElementById('opportunitiesList');
+  container.innerHTML = '';
+  const filtered = state.opportunities.filter(o=>{
+    if(!filterText) return true;
+    const q = filterText.toLowerCase();
+    return o.title.toLowerCase().includes(q) || o.skills.join(' ').toLowerCase().includes(q) || o.city.toLowerCase().includes(q);
+  });
+  // sort by compatibility
+  filtered.sort((a,b)=>compatibilityScore(b,state.members)-compatibilityScore(a,state.members));
+  filtered.forEach(op=>{
+    const score = compatibilityScore(op,state.members);
+    const div = document.createElement('div');
+    div.className = 'opportunity';
+    div.innerHTML = `
+      <div class="op-row">
+        <div>
+          <div style="font-weight:800">${op.title}</div>
+          <div class="small">${op.company} · ${op.city}</div>
+        </div>
+        <div style="text-align:right">
+          <div class="compat">${score}% compatible</div>
+          <div class="small">${op.contract} · ${op.shift}</div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+        <div class="chips">${op.skills.map(s=>`<div class="chip">${s}</div>`).join('')}</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn" onclick="viewOpportunity(${op.id})">Ver oportunidad</button>
+          <button class="btn primary" onclick="applyOpportunity(${op.id})">Postularme</button>
+        </div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+  document.getElementById('kOportunidades').textContent = state.opportunities.length;
+}
+document.getElementById('searchBtn').addEventListener('click',()=>{
+  const q = document.getElementById('searchInput').value;
+  renderOpportunities(q);
+});
+document.getElementById('searchInput').addEventListener('keyup',(e)=>{
+  if(e.key === 'Enter') renderOpportunities(e.target.value);
+});
+function viewOpportunity(id){
+  const op = state.opportunities.find(o=>o.id===id);
+  alert(`${op.title} — ${op.company}\n\nUbicación: ${op.city}\nContrato: ${op.contract}\nJornada: ${op.shift}\nSalario: ${op.salary}\n\nHabilidades requeridas: ${op.skills.join(', ')}`);
+}
+function applyOpportunity(id){
+  state.metrics.applications += 1;
+  showToast("Postulación registrada");
+  renderProgress();
+}
+
+/* FINANZAS */
+function renderFinance(){
+  const f = state.finance;
+  document.getElementById('incomeVal').textContent = formatCOP(f.income);
+  document.getElementById('expensesVal').textContent = formatCOP(f.expenses);
+  document.getElementById('debtVal').textContent = formatCOP(f.debt);
+  const available = f.income - f.expenses - f.debt;
+  document.getElementById('availableVal').textContent = formatCOP(available);
+  const pct = Math.min(100, Math.round((available / f.goal) * 100));
+  document.getElementById('goalBar').style.width = pct + '%';
+  document.getElementById('goalPct').textContent = pct + '% alcanzado';
+  document.querySelector('.pie').textContent = formatCOP(Math.max(0, available));
+}
+function formatCOP(n){
+  return '$' + n.toLocaleString('es-CO') + ' COP';
+}
+function adjustFinance(delta){
+  state.finance.income += delta;
+  renderFinance();
+  showToast("Ajuste aplicado");
+}
+function simulate(){
+  // simple simulation: if available increases by 10% monthly, time to goal
+  const f = state.finance;
+  const available = f.income - f.expenses - f.debt;
+  const months = Math.ceil((f.goal) / Math.max(1, available));
+  alert(`Con el dinero disponible actual (${formatCOP(available)} / mes) se estima alcanzar la meta en aproximadamente ${months} meses.`);
+}
+
+/* PROGRESO */
+function renderProgress(){
+  document.getElementById('kPostulaciones').textContent = state.metrics.applications;
+  document.getElementById('kEntrevistas').textContent = state.metrics.interviews;
+  document.getElementById('kEmpleos').textContent = state.metrics.hires;
+}
+function renderAll(){
+  renderFamilySummary();
+  renderMembers();
+  renderOpportunities();
+  renderFinance();
+  renderProgress();
+}
+function renderMembersInitial(){
+  // ensure memberCount matches family count
+  document.getElementById('familyCount').value = state.members.length;
+}
+function applySample(idx){
+  const m = state.members[idx];
+  alert(`Sugerencias para ${m.name}:\n- Buscar roles relacionados con: ${m.skills.join(', ')}\n- Ajustar disponibilidad para aumentar compatibilidad con jornadas.`);
+}
+
+/* Inicialización */
+renderAll();
+renderMembersInitial();
+
+/* small helpers for progress update after applying */
+function renderProgress(){
+  document.getElementById('kPostulaciones').textContent = state.metrics.applications;
+  document.getElementById('kEntrevistas').textContent = state.metrics.interviews;
+  document.getElementById('kEmpleos').textContent = state.metrics.hires;
+}
+renderProgress();
+
+/* quick navigation for mobile: show/hide nav on small screens */
+document.querySelector('.logo').addEventListener('click',()=>{
+  if(window.innerWidth < 900){
+    const nav = document.querySelector('nav');
+    nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+  }
+});
+</script>
+
+</body>
+</html>
